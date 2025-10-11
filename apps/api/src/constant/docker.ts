@@ -1,0 +1,1 @@
+export const DOCKER_SOCK = "/var/run/docker.sock";

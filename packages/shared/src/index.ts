@@ -1,2 +1,2 @@
-export * from './docker';
+export * from './types/docker';
 export * from './api';
