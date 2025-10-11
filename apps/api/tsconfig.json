@@ -1,0 +1,22 @@
+{
+  "extends": "@repo/typescript-config/nodejs.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "paths": {
+      "@repo/shared": [
+        "../../packages/shared/src/"
+      ]
+    },
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "../../packages/shared"
+    }
+  ]
+}
