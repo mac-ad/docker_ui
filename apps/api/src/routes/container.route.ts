@@ -1,15 +1,14 @@
 import { Router, type IRouter, } from "express";
-import { GetContainers, GetSpecificContainer } from "./controllers";
+import { GetContainers, GetSpecificContainer } from "../controller/container.controller";
 
 export const router: IRouter = Router();
 
-
-router.get("/containers", GetContainers);
-
+// get list of containers
+router.get("/", GetContainers);
 
 // get container detail
 router.get(
-    "/containers/:id",
+    "/:id",
     GetSpecificContainer
 )
 

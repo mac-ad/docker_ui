@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 
-import { DockerRouter } from './routes';
+import { DockerRouter } from './routes/container.route';
+import { ImageRoutes } from "./routes/image.route";
 
 const app = express();
 app.use(cors());
@@ -14,6 +15,7 @@ app.get("/test", (req: Request, res: Response) => {
         status: "ok"
     })
 })
-app.use("/", DockerRouter)
+app.use("/containers", DockerRouter)
+app.use("/images", ImageRoutes)
 
 app.listen(4000, () => console.log("🚀 API running on http://localhost:4000"));

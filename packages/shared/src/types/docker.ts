@@ -14,3 +14,19 @@ export const DockerContainerSchema = z.object({
 
 
 export type IDockerContainer = z.infer<typeof DockerContainerSchema>
+
+
+
+export const ImageSchema = z.object({
+    Id: z.string(),
+    ParentId: z.string(),
+    RepoTags: z.array(z.string()),
+    RepoDigests: z.array(z.string()),
+    Created: z.number(),
+    Size: z.number(),
+    SharedSize: z.number(),
+    Labels: z.record(z.string(), z.string()).nullable(),
+    Containers: z.number(),
+})
+
+export type IImageSchema = z.infer<typeof ImageSchema>

@@ -1,16 +1,16 @@
 import { Request, Response } from 'express'
 import { DockerContainerSchema, IDockerContainer } from "@repo/shared";
-import { dockerRequest } from "./utils/docker";
-import { errorResponse, successResponse } from "./utils/api";
-import { DOCKER_API } from "./constant/endpoints";
+import { dockerRequest } from "../utils/docker";
+import { errorResponse, successResponse } from "../utils/api";
+import { DOCKER_API } from "../constant/endpoints";
 
 export const GetContainers = async (req: Request, res: Response) => {
     try {
-        const data = await dockerRequest({
+        const data: IDockerContainer[] = await dockerRequest({
             path: DOCKER_API.LIST_ALL_CONTAINERS()
         });
 
-        const refinedData: IDockerContainer[] = data.map((i: any) => (DockerContainerSchema.parse(i)))
+        const refinedData = data.map((i: any) => (DockerContainerSchema.parse(i)))
 
         successResponse({
             data: refinedData,
@@ -20,7 +20,8 @@ export const GetContainers = async (req: Request, res: Response) => {
     } catch (err) {
         errorResponse({
             message: "Failed fetching containers list",
-            res
+            res,
+            error:err
         })
     }
 }
@@ -43,7 +44,8 @@ export const GetSpecificContainer = async (req: Request, res: Response) => {
     } catch (err) {
         errorResponse({
             message: "Failed to fetch container",
-            res
+            res,
+            error :err
         })
     }
 }

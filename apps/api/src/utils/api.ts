@@ -17,7 +17,7 @@ export const successResponse = ({
 
     res.status(status).send({
         data: respData,
-        message
+        message: msg
     })
 }
 
@@ -25,21 +25,23 @@ export const errorResponse = ({
     status = 500,
     data,
     res,
-    message
+    message,
+    error
 }: {
     status?: number;
     data?: any;
     res: Response;
     message?: string;
+    error: any
 }) => {
 
     const msg = message || "Internal server error"
     const st = status || 500
     const respData = data || null
 
-
     res.status(st).send({
         data: respData,
-        message: msg
+        message: msg,
+        error
     })
 }
