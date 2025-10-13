@@ -7,7 +7,9 @@ const config = {
     darkMode: "class",  // use the “class” strategy (so dark mode is toggled via a class on html)
     theme: {
         extend: {
-            // your custom tokens
+            colors: {
+                safe: 'var(--safe)',
+            },
         },
     },
     plugins: [],

@@ -3,6 +3,7 @@ import cors from "cors";
 
 import { DockerRouter } from './routes/container.route';
 import { ImageRoutes } from "./routes/image.route";
+import { DashboardRoutes } from "./routes/dashboard.route";
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,8 @@ app.get("/test", (req: Request, res: Response) => {
         status: "ok"
     })
 })
+
+app.use("/dashboard", DashboardRoutes);
 app.use("/containers", DockerRouter)
 app.use("/images", ImageRoutes)
 

@@ -4,7 +4,9 @@ export enum DockerApiKey {
     GET_SPECIFIC_CONTAINER = 'GET_SPECIFIC_CONTAINER',
 
     LIST_ALL_IMAGES = 'LIST_ALL_IMAGES',
-    GET_SPECIFIC_IMAGE = "GET_SPECIFIC_IMAGE"
+    GET_SPECIFIC_IMAGE = "GET_SPECIFIC_IMAGE",
+
+    GET_SYSTEM_INFO = "GET_SYSTEM_INFO"
 }
 
 
@@ -12,7 +14,8 @@ export const DOCKER_API: Record<DockerApiKey, (data?: any) => string> = {
     [DockerApiKey.LIST_ALL_CONTAINERS]: () => `/containers/json?all=1`,
     [DockerApiKey.GET_SPECIFIC_CONTAINER]: (id: string) => `/containers/${id}/json`,
     [DockerApiKey.LIST_ALL_IMAGES]: () => `/images/json`,
-    [DockerApiKey.GET_SPECIFIC_IMAGE]: (id: string) => `/images/${id}/json`
+    [DockerApiKey.GET_SPECIFIC_IMAGE]: (id: string) => `/images/${id}/json`,
+    [DockerApiKey.GET_SYSTEM_INFO]: () => `/info`
 }
 
 export type IDockerApiKey = keyof typeof DOCKER_API;

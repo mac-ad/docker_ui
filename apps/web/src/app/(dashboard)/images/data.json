@@ -1,0 +1,122 @@
+{
+    "data": [
+        {
+            "Id": "sha256:44507a8753e68fef064628af9ad09827cb2ad58bef5cc8a6a18558f3f37d4fed",
+            "ParentId": "",
+            "RepoTags": [
+                "my-api:latest"
+            ],
+            "RepoDigests": [],
+            "Created": 1760179325,
+            "Size": 251288445,
+            "SharedSize": -1,
+            "Labels": null,
+            "Containers": 1
+        },
+        {
+            "Id": "sha256:c42784aa8be08c563181a16a104069487dc8630a670c19c3de6fffb57bd247e7",
+            "ParentId": "",
+            "RepoTags": [
+                "app:latest"
+            ],
+            "RepoDigests": [],
+            "Created": 1754920647,
+            "Size": 161927099,
+            "SharedSize": -1,
+            "Labels": null,
+            "Containers": 1
+        },
+        {
+            "Id": "sha256:2cd1d97f893f70cee86a38b7160c30e5750f3ed6ad86c598884ca9c6a563a501",
+            "ParentId": "",
+            "RepoTags": [
+                "nginx:latest",
+                "app:latest"
+            ],
+            "RepoDigests": [
+                "nginx@sha256:84ec966e61a8c7846f509da7eb081c55c1d56817448728924a87ab32f12a72fb"
+            ],
+            "Created": 1752530846,
+            "Size": 192231837,
+            "SharedSize": -1,
+            "Labels": {
+                "maintainer": "NGINX Docker Maintainers <docker-maint@nginx.com>"
+            },
+            "Containers": 1
+        },
+        {
+            "Id": "sha256:e8a1afec5f870022207eb632219c4289fb76988fa2d2b8e5d208e02b187e94ff",
+            "ParentId": "",
+            "RepoTags": [
+                "redis:6"
+            ],
+            "RepoDigests": [
+                "redis@sha256:37440b1f783e3dcabb49eaaaa1bb52a619275072eadf9dadbaa271e5b69bfe2c"
+            ],
+            "Created": 1751820718,
+            "Size": 105896136,
+            "SharedSize": -1,
+            "Labels": null,
+            "Containers": 1
+        },
+        {
+            "Id": "sha256:554ef40242e083b1c1364cfe4240b42ec2aba6a4f9c97b86b011ec6aa8b6b66b",
+            "ParentId": "",
+            "RepoTags": [
+                "ghcr.io/mac-ad/pdf-toolbox:latest"
+            ],
+            "RepoDigests": [
+                "ghcr.io/mac-ad/pdf-toolbox@sha256:9c48f7becc5f3e4596b384c9cb3284b715febda080e0e38e5c36bc9cd7d7b64b"
+            ],
+            "Created": 1745129374,
+            "Size": 925968921,
+            "SharedSize": -1,
+            "Labels": null,
+            "Containers": 0
+        },
+        {
+            "Id": "sha256:17ce08dd41b737650e518738ea56924e214b6359d5bcc9a505d3b90ff8a358fc",
+            "ParentId": "",
+            "RepoTags": [],
+            "RepoDigests": [
+                "ghcr.io/mac-ad/pdf-toolbox@sha256:a0075aa4cfcc42bf1ce8998c0b68d4d82451cc9b342580c58864cb95fcf22967"
+            ],
+            "Created": 1745128020,
+            "Size": 925971348,
+            "SharedSize": -1,
+            "Labels": null,
+            "Containers": 0
+        },
+        {
+            "Id": "sha256:1df63236cbc2bbb65daaca93f7c692036550e86532b7b9c8f32510fd9d585d38",
+            "ParentId": "",
+            "RepoTags": [
+                "public.ecr.aws/supabase/edge-runtime:v1.67.4",
+                "ghcr.io/mac-ad/pdf-toolbox:latest"
+            ],
+            "RepoDigests": [
+                "public.ecr.aws/supabase/edge-runtime@sha256:358930e39ff36e0130c3afe3808a5c8f8322f7ff9c42624406dacce859ed0e24"
+            ],
+            "Created": 1742855073,
+            "Size": 650734386,
+            "SharedSize": -1,
+            "Labels": null,
+            "Containers": 0
+        },
+        {
+            "Id": "sha256:6d3e4188a38af91b0c1577b9e88c53368926b2fe0e1fb985d6e8a70040520c4d",
+            "ParentId": "",
+            "RepoTags": [
+                "busybox:latest"
+            ],
+            "RepoDigests": [
+                "busybox@sha256:f9a104fddb33220ec80fc45a4e606c74aadf1ef7a3832eb0b05be9e90cd61f5f"
+            ],
+            "Created": 1727386302,
+            "Size": 4277910,
+            "SharedSize": -1,
+            "Labels": null,
+            "Containers": 0
+        }
+    ]
+}

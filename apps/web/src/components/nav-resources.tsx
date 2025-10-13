@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import type { LucideIcon as Icon } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 
 export function NavResources({
@@ -37,6 +38,8 @@ export function NavResources({
   }[]
 }) {
   const { isMobile } = useSidebar()
+
+  const pathname = usePathname();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">

@@ -8,9 +8,6 @@ export const sidebar_data = {
             url: "/dashboard",
             icon: IconDashboard,
         },
-
-    ],
-    resources: [
         {
             title: "Containes",
             url: "/containers",
@@ -30,40 +27,6 @@ export const sidebar_data = {
             title: "Networks",
             url: "/networks",
             icon: Network,
-        },
-    ],
-    navSecondary: [
-        {
-            title: "Settings",
-            url: "#",
-            icon: IconSettings,
-        },
-        {
-            title: "Get Help",
-            url: "#",
-            icon: IconHelp,
-        },
-        {
-            title: "Search",
-            url: "#",
-            icon: IconSearch,
-        },
-    ],
-    documents: [
-        {
-            name: "Data Library",
-            url: "#",
-            icon: IconDatabase,
-        },
-        {
-            name: "Reports",
-            url: "#",
-            icon: IconReport,
-        },
-        {
-            name: "Word Assistant",
-            url: "#",
-            icon: IconFileWord,
         },
     ],
 }
