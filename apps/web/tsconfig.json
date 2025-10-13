@@ -9,6 +9,12 @@
     "paths": {
       "@repo/shared": [
         "../../packages/shared/src"
+      ],
+      "baseUrl": [
+        "."
+      ],
+      "@/*": [
+        "./src/*"
       ]
     }
   },
