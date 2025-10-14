@@ -79,7 +79,7 @@
   --sidebar-ring: oklch(0.606 0.25 292.717);
 
   --safe: oklch(0.606 0.25 120);
-  --pending: oklch(0.68 0.2 95);
+  --pending: oklch(0.77 0.2 95);
 }
 
 .dark {
@@ -116,7 +116,7 @@
   --sidebar-ring: oklch(0.541 0.281 293.009);
 
   --safe: oklch(0.55 0.5 120);
-  --pending: oklch(0.45 0.25 95);
+  --pending: oklch(0.67 0.25 95);
 }
 
 @layer base {

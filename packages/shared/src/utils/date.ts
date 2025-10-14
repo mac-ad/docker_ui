@@ -23,8 +23,6 @@ export const convertSize = ({
     format?: "mb" | "gb"
 }) => {
 
-    console.log(sizeInBytes)
-
     let size = 0;
 
     switch (format) {

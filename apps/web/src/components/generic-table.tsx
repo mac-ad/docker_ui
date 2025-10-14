@@ -4,6 +4,7 @@ import {
     ColumnDef,
     flexRender,
     getCoreRowModel,
+    HeaderGroup,
     useReactTable,
 } from "@tanstack/react-table"
 
@@ -19,15 +20,18 @@ import { Button } from "./ui/button"
 import { IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight } from "@tabler/icons-react"
 import { Label } from "./ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { Skeleton } from "./ui/skeleton"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    loading?: boolean
 }
 
 export function GenericTable<TData, TValue>({
     columns,
     data,
+    loading = true
 }: DataTableProps<TData, TValue>) {
     const table = useReactTable({
         data,
@@ -36,15 +40,15 @@ export function GenericTable<TData, TValue>({
     })
 
     return (
-        <div>
-            <div className="overflow-hidden rounded-md border">
+        <>
+            <div className="overflow-x-auto rounded-md border">
                 <Table>
                     <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
+                        {table.getHeaderGroups().map((headerGroup, index) => (
+                            <TableRow key={index}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id}>
+                                        <TableHead key={header.index}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -58,31 +62,40 @@ export function GenericTable<TData, TValue>({
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                    className="odd:bg-secondary/20 text-xs"
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No results.
-                                </TableCell>
-                            </TableRow>
-                        )}
+                        {
+                            loading ?
+                                <RenderTableLoading
+                                    headerGroups={table.getHeaderGroups()}
+                                    rowsCount={8}
+                                />
+                                : (
+                                    table.getRowModel().rows?.length ? (
+                                        table.getRowModel().rows.map((row) => (
+                                            <TableRow
+                                                key={row.id}
+                                                data-state={row.getIsSelected() && "selected"}
+                                                className="odd:bg-secondary/20 text-xs"
+                                            >
+                                                {row.getVisibleCells().map((cell, index) => {
+                                                    return (
+                                                        <TableCell key={index}>
+                                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                        </TableCell>
+                                                    )
+                                                })}
+                                            </TableRow>
+                                        ))
+                                    ) : (
+                                        <TableRow>
+                                            <TableCell colSpan={columns.length} className="h-24 text-center">
+                                                No results.
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                )
+                        }
                     </TableBody>
                 </Table>
-
-
             </div>
             {/* pagination */}
             <div className="flex items-center justify-between px-4 py-4 pt-6">
@@ -162,6 +175,30 @@ export function GenericTable<TData, TValue>({
                     </div>
                 </div>
             </div>
-        </div>
+        </>
+    )
+}
+
+
+const RenderTableLoading = ({ headerGroups, rowsCount = 5 }: {
+    headerGroups: any,
+    rowsCount?: number
+}) => {
+
+
+    return (
+        Array(rowsCount).fill(0).map((item, index) => (
+            <TableRow key={item + index} className="hover:bg-transparent">
+                {
+                    headerGroups[0]?.headers?.map((header: any, index:number) => (
+                        <TableCell key={index} >
+                            <Skeleton
+                                className="h-7 rounded-sm"
+                            />
+                        </TableCell>
+                    ))
+                }
+            </TableRow>
+        ))
     )
 }

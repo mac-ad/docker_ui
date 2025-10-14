@@ -18,9 +18,9 @@ const badgeVariants = cva(
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         safe:
-          "text-foreground bg-safe",
+          "text-foreground bg-safe text-primary-foreground",
         pending:
-          "border-transparent bg-pending",
+          "border-transparent bg-pending text-primary-foreground",
       },
     },
     defaultVariants: {

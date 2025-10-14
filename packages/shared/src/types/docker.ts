@@ -27,6 +27,7 @@ export const ImageSchema = z.object({
     SharedSize: z.number(),
     Labels: z.record(z.string(), z.string()).nullable(),
     Containers: z.number(),
+    Manifests: z.any()
 })
 
 export type IImageSchema = z.infer<typeof ImageSchema>

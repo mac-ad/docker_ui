@@ -3,9 +3,9 @@
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes';
 import React, { useEffect, useState } from 'react'
+import { Button } from './ui/button';
 
 const ThemeBtn = () => {
-
     const { theme, setTheme, resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
@@ -18,12 +18,11 @@ const ThemeBtn = () => {
     const isDark = resolvedTheme === "dark";
 
     return (
-        <button
+        <Button
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="fixed top-5 right-5 z-[999] cursor-pointer  p-1"
         >
             {isDark ? <Moon size="20" /> : <Sun />}
-        </button>
+        </Button>
     )
 }
 

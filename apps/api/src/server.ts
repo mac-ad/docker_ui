@@ -6,6 +6,17 @@ import { ImageRoutes } from "./routes/image.route";
 import { DashboardRoutes } from "./routes/dashboard.route";
 
 const app = express();
+
+
+declare global {
+    namespace Express {
+        interface Request {
+            parsedQuery: Record<string, unknown>
+        }
+    }
+}
+
+
 app.use(cors());
 app.use(express.json());
 

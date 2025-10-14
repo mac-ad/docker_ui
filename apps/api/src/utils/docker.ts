@@ -21,16 +21,32 @@ export async function dockerRequest({
                 data += chunk
             })
             res.on("end", () => {
-                try {
-                    resolve(JSON.parse(data))
-                } catch (err) {
-                    resolve(data)
+                // try {
+                //     resolve(JSON.parse(data))
+                // } catch (err) {
+                //     resolve(data)
+                // }
+
+                const isJson = res.headers["content-type"]?.includes("application/json")
+                const result = isJson ? JSON.parse(data || "{}") : data
+
+                // 🚨 Check for HTTP error codes
+                if (res.statusCode && res.statusCode >= 400) {
+                    return reject({
+                        statusCode: res.statusCode,
+                        message: result.message || res.statusMessage || result,
+                    })
                 }
+
+                resolve(result)
             })
 
         })
 
-        req.on("error", (err) => reject(err));
+        req.on("error", (err) => {
+            console.log("inside on error")
+            reject(err)
+        });
         req.end();
     });
 }
