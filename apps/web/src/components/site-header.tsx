@@ -28,7 +28,7 @@ export function SiteHeader({
               GitHub
             </a>
           </Button>
-          <ThemeBtn />
+          {/* <ThemeBtn /> */}
         </div>
       </div>
     </header>

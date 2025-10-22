@@ -1,5 +1,5 @@
 import { DOCKER_SOCK } from "../constant/docker";
-import { IDockerRequest } from "../types/docker";
+import { IDockerRequest, IDockerStreamRequest } from "../types/docker";
 import http from 'http'
 
 export async function dockerRequest({
@@ -48,5 +48,60 @@ export async function dockerRequest({
             reject(err)
         });
         req.end();
+    });
+}
+
+export async function dockerStreamRequest({
+    path,
+    method = "GET",
+    req,
+    res,
+}: IDockerStreamRequest) {
+
+    // upgrade http to SSE connection
+    res.set({
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive'
+    })
+    res.flushHeaders()
+
+    const options = {
+        socketPath: DOCKER_SOCK,
+        path,
+        method
+    }
+
+    const dockerReq = http.request(options, dockerRes => {
+        dockerRes.on('data', chunk => {
+            chunk.toString()
+                .split('\n')
+                .filter(Boolean)
+                .forEach((line: string) => {
+                    try {
+                        const json = JSON.parse(line);
+                        res.write(`data: ${JSON.stringify(json)}\n\n`);
+                    } catch (err) {
+                        res.write(`data: ${line}\n\n`);
+                    }
+                });
+
+        })
+
+        dockerRes.on('end', () => {
+            res.write('event: end\ndata: done\n\n');
+            res.end();
+        });
+    })
+
+    dockerReq.on('error', err => {
+        res.write(`data: ERROR: ${err.message}\n\n`);
+        res.end();
+    });
+
+    dockerReq.end();
+
+    req.on('close', () => {
+        dockerReq.abort();
     });
 }

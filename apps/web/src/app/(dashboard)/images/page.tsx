@@ -12,6 +12,8 @@ import DashboardMainWrapper from '@/components/dashboard-main-wrapper';
 import { ListImagesTableColumns } from './columns';
 import { useDeleteImageMutation, useImageQuery } from '@/api/queries/images';
 import DeleteConfirmModal from '@/components/modals/delete-confirm-modal';
+import PullImageModal from '@/components/modals/PullImage/pull-image-modal';
+import { Button } from '@/components/ui/button';
 
 const ImagesPage = () => {
     const [copied, setCopied] = useState<boolean>(false)
@@ -20,11 +22,11 @@ const ImagesPage = () => {
     const { data: imagesResponse, isLoading } = useImageQuery();
     const data = imagesResponse?.data
 
-
+    // pull image modal
+    const [showPullImageModal, setShowPullImageModal] = useState<boolean>(false);
 
     // delete image
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-
 
     const { mutate: deleteImage, mutateAsync: deleteImageAsync, isLoading: deleting } = useDeleteImageMutation({
         onSuccess: () => {
@@ -154,6 +156,9 @@ const ImagesPage = () => {
         <DashboardMainWrapper
             title="Docker Images"
         >
+            <Button onClick={() => setShowPullImageModal(true)}>
+                Pull image
+            </Button>
             <div className="flex flex-1 flex-col">
                 <div className="@container/main flex flex-1 flex-col gap-2">
                     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
@@ -168,6 +173,10 @@ const ImagesPage = () => {
                 description={`This action cannot be undone. This will permanently delete image.`}
                 confirmHandler={deleteHandler}
                 loading={deleting}
+            />
+            <PullImageModal
+                open={showPullImageModal}
+                setOpen={setShowPullImageModal}
             />
         </DashboardMainWrapper>
     )

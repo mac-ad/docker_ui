@@ -1,8 +1,7 @@
+import { GetImagesListResponse } from "@repo/shared";
 
-
-export const fetchImagesList = async () => {
-    console.log("fetched images list")
-    const res = await fetch("http://localhost:4000/images").then(res => res.json());
+export const fetchImagesList = async (): Promise<GetImagesListResponse> => {
+    const res: GetImagesListResponse = await fetch("http://localhost:4000/images").then(res => res.json());
 
     console.log("res = ", res)
 
@@ -10,7 +9,6 @@ export const fetchImagesList = async () => {
 }
 
 export const deleteImage = async (id: string) => {
-
     const res = await fetch(`http://localhost:4000/images/${id}`, {
         method: "DELETE"
     })

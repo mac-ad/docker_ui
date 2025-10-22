@@ -1,6 +1,4 @@
-
 import { z } from 'zod';
-
 
 export const DockerContainerSchema = z.object({
     Id: z.string(),
@@ -12,12 +10,9 @@ export const DockerContainerSchema = z.object({
     State: z.string()
 })
 
-
 export type IDockerContainer = z.infer<typeof DockerContainerSchema>
 
-
-
-export const ImageSchema = z.object({
+export const ListImageSchema = z.object({
     Id: z.string(),
     ParentId: z.string(),
     RepoTags: z.array(z.string()),
@@ -30,4 +25,4 @@ export const ImageSchema = z.object({
     Manifests: z.any()
 })
 
-export type IImageSchema = z.infer<typeof ImageSchema>
+export type IListImageSchema = z.infer<typeof ListImageSchema>
