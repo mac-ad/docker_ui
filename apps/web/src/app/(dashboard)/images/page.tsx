@@ -6,7 +6,7 @@ import { GenericTable } from '@/components/generic-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
-import { Copy, CopyCheckIcon, Search, Tag, Trash } from 'lucide-react';
+import { Copy, CopyCheckIcon, Inspect, Trash } from 'lucide-react';
 import { toast } from 'sonner';
 import DashboardMainWrapper from '@/components/dashboard-main-wrapper';
 import { ListImagesTableColumns } from './columns';
@@ -14,6 +14,10 @@ import { useDeleteImageMutation, useImageQuery } from '@/api/queries/images';
 import DeleteConfirmModal from '@/components/modals/delete-confirm-modal';
 import PullImageModal from '@/components/modals/PullImage/pull-image-modal';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { IconDotsVertical } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
+import { Badge } from '@/components/ui/badge';
 
 const ImagesPage = () => {
     const [copied, setCopied] = useState<boolean>(false)
@@ -27,6 +31,7 @@ const ImagesPage = () => {
 
     // delete image
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    const [currentlyDeleting, setCurrentlyDeleting] = useState<string | null>(null)
 
     const { mutate: deleteImage, mutateAsync: deleteImageAsync, isLoading: deleting } = useDeleteImageMutation({
         onSuccess: () => {
@@ -35,12 +40,23 @@ const ImagesPage = () => {
         }
     });
 
+    const router = useRouter()
+
     const deleteHandler = async () => {
         if (!currentRowId) return;
         try {
             deleteImage(currentRowId)
         } catch (err) {
+            console.log(err)
+        }
+    }
 
+    const deleteSpecificTagHandler = async () => {
+        if (!currentlyDeleting) return;
+        try {
+            deleteImage(currentlyDeleting)
+        } catch (err) {
+            console.log(err)
         }
     }
 
@@ -60,6 +76,28 @@ const ImagesPage = () => {
     }
 
     const columns: ColumnDef<any, any>[] = [
+        {
+            accessorKey: "RepoTags",
+            header: "Name",
+            cell: (prop) => {
+
+                const name = prop.getValue()?.[0]?.split(":")?.[0];
+
+                return (
+                    <div className="flex items-center gap-2 cursor-pointer w-fit">
+
+                        <Button
+                            variant="link"
+                            className=" cursor-pointer p-0 overflow-hidden"
+                        >
+                            <span className="block  overflow-hidden text-ellipsis max-w-[100px]">
+                                {name}
+                            </span>
+                        </Button>
+                    </div>
+                )
+            }
+        },
         {
             accessorKey: "Id",
             header: "Image ID",
@@ -94,61 +132,78 @@ const ImagesPage = () => {
                 )
             }
         },
+
         ...ListImagesTableColumns,
         {
-            accessorKey: "",
-            header: "Actions",
+            accessorFn: (row) => {
+                return row["RepoTags"]
+            },
+            header: "Repository",
             cell: (props) => {
                 return (
                     <div className="flex items-center gap-2">
-                        {/* tag */}
-                        <Tooltip>
-                            <TooltipContent>Add Tag</TooltipContent>
-                            <TooltipTrigger>
-                                <Tag className="text-primary cursor-pointer opacity-80 hover:opacity-100" size="18" />
-                            </TooltipTrigger>
-                        </Tooltip>
-                        {/* run */}
-                        {/* <Tooltip>
-                            <TooltipContent>Create Container</TooltipContent>
-                            <TooltipTrigger>
-                                <Play className="text-safe cursor-pointer opacity-50 hover:opacity-100" size="18" />
-                            </TooltipTrigger>
-                        </Tooltip> */}
-                        {/* inspect */}
-                        <Tooltip>
-                            <TooltipContent>Inspect Image</TooltipContent>
-                            <TooltipTrigger>
-                                <Search className="text-pending cursor-pointer opacity-80 hover:opacity-100" size="18" />
-                            </TooltipTrigger>
-                        </Tooltip>
-
+                        {
+                            props.getValue()?.map((tag: string) => {
+                                return (
+                                    <Badge
+                                        key={tag}
+                                        variant="secondary"
+                                    >
+                                        {tag}
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="size-4 cursor-pointer"
+                                            onClick={() => {
+                                                setShowDeleteModal(true)
+                                                setCurrentlyDeleting(tag)
+                                            }}
+                                        >
+                                            <Trash className="size-3 text-destructive" />
+                                        </Button>
+                                    </Badge>
+                                )
+                            })
+                        }
                     </div>
                 )
             }
         },
         {
-            accessorKey: "Id",
-            header: "",
+            id: 'actions',
             cell: (props) => {
 
-                const id = props.getValue()
+                const data = props.row.original;
 
-                return (
-                    <div className="flex items-center gap-2">
-                        {/* remove */}
-                        <Tooltip>
-                            <TooltipContent>Delete Image</TooltipContent>
-                            <TooltipTrigger>
-                                <Trash className="text-destructive cursor-pointer opacity-80 hover:opacity-100" size="18" onClick={() => {
-                                    setShowDeleteModal(true)
-                                    setCurrentRowId(id)
-                                }} />
-                            </TooltipTrigger>
-                        </Tooltip>
-                    </div>
-                )
+                return <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+                            size="icon"
+                        >
+                            <IconDotsVertical />
+                            <span className="sr-only">Open menu</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-32">
+                        <DropdownMenuItem
+                            onClick={() => {
+                                router.push(`/images/${data.Id}`)
+                            }}
+                        ><Inspect /> Inspect</DropdownMenuItem>
+                        <DropdownMenuItem>Make a copy</DropdownMenuItem>
+                        <DropdownMenuItem>Favorite</DropdownMenuItem>
+                        {/* <DropdownMenuSeparator /> */}
+                        {/* <DropdownMenuItem variant="destructive" onClick={() => {
+                            setShowDeleteModal(true)
+                            setCurrentRowId(data.Id)
+                        }}>Delete</DropdownMenuItem> */}
+                    </DropdownMenuContent>
+                </DropdownMenu >
             }
+
+
         }
     ]
 
@@ -169,9 +224,9 @@ const ImagesPage = () => {
             <DeleteConfirmModal
                 open={showDeleteModal}
                 setOpen={setShowDeleteModal}
-                title="Delete image"
+                title={`Delete image ${currentlyDeleting}`}
                 description={`This action cannot be undone. This will permanently delete image.`}
-                confirmHandler={deleteHandler}
+                confirmHandler={deleteSpecificTagHandler}
                 loading={deleting}
             />
             <PullImageModal

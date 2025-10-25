@@ -1,5 +1,5 @@
 import { Router, type IRouter, } from "express";
-import { GetContainers, GetSpecificContainer } from "../controller/container.controller";
+import { GetContainers, GetContainerStats, GetSpecificContainer } from "../controller/container.controller";
 
 export const router: IRouter = Router();
 
@@ -11,6 +11,9 @@ router.get(
     "/:id",
     GetSpecificContainer
 )
+
+// stream stat of a container
+router.get("/:id/stats", GetContainerStats)
 
 
 export {

@@ -21,6 +21,8 @@ const badgeVariants = cva(
           "text-foreground bg-safe text-primary-foreground",
         pending:
           "border-transparent bg-pending text-primary-foreground",
+        stale:
+          "border-transparent bg-gray-700 text-primary-foreground",
       },
     },
     defaultVariants: {

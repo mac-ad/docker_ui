@@ -17,10 +17,12 @@ export const formatUnixTimestamp = (unixTimestamp: number) => {
 
 export const convertSize = ({
     sizeInBytes,
-    format = "mb"
+    format = "mb",
+    addSuffix = true,
 }: {
     sizeInBytes: number,
-    format?: "mb" | "gb"
+    format?: "mb" | "gb",
+    addSuffix?: boolean;
 }) => {
 
     let size = 0;
@@ -35,6 +37,7 @@ export const convertSize = ({
             break
     }
 
-    return size.toFixed(2) + ' ' + format.toUpperCase()
+    const finalSize = size.toFixed(2)
 
+    return addSuffix ? finalSize + ' ' + format?.toUpperCase() : finalSize
 }

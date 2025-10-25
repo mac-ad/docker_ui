@@ -1,14 +1,15 @@
 "use client"
 
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogTitle, DialogTrigger } from '../../ui/dialog';
-import { Button } from '../../ui/button';
-import { Label } from '../../ui/label';
-import { Input } from '../../ui/input';
-import { DialogClose } from '@radix-ui/react-dialog';
-import { LoaderCircle } from 'lucide-react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../../ui/dialog';
 import { useQueryClient } from '@tanstack/react-query';
 import SearchImage from './SearchImage';
+import PullingImageLogs from './PullingImageLogs';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Check, CheckCheck, ChevronDown, ChevronUp, Loader } from 'lucide-react';
+import { twMerge } from 'tailwind-merge';
 
 const PullImageModal = ({
     open,
@@ -20,6 +21,7 @@ const PullImageModal = ({
     const [startedPulling, setStartedPulling] = useState<boolean>(false)
     const [logs, setLogs] = useState<string[]>([])
     const [pullingSuccess, setPullingSuccess] = useState<boolean>(false);
+    const [showLogs, setShowLogs] = useState<boolean>(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const ES = useRef<EventSource>(null)
@@ -38,11 +40,30 @@ const PullImageModal = ({
         tag: ''
     })
 
-    const closeHandler = () => {
+    const inputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        if (logs?.length !== 0) setLogs([]);
+        if (pullingSuccess) setPullingSuccess(false)
+        setData(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const resetModal = () => {
         setLogs([]);
         ES.current?.close()
         setStartedPulling(false);
         setPullingSuccess(false);
+        setData((prev) => ({
+            ...prev,
+            imageName: '',
+            tag: ''
+        }))
+    }
+
+    const closeHandler = () => {
+        setOpen(false)
+        resetModal();
         queryClient.invalidateQueries(["imagesList"])
     }
 
@@ -72,20 +93,7 @@ const PullImageModal = ({
         });
     }
 
-
-    const inputChangeHandler = (e: any) => {
-        setData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value
-        }))
-    }
-
-    useEffect(() => {
-        const el = containerRef.current;
-        if (el) {
-            el.scrollTop = el.scrollHeight;
-        }
-    }, [logs]);
+    console.log(logs)
 
     return (
         <>
@@ -111,87 +119,78 @@ const PullImageModal = ({
                             done.
                         </DialogDescription>
                     </DialogHeader>
-                    {
-                        !pullingSuccess && <form onSubmit={submitHandler} className="flex-1 flex flex-col">
+                    <div className="flex-1 flex flex-col min-h-0 gap-2">
+                        {/* <SearchImage /> */}
+                        <form onSubmit={submitHandler}>
                             <div className="grid gap-4">
-                                <SearchImage />
-                                {/* <div className="grid gap-3">
-                                    <Label htmlFor="registry">Image Registry</Label>
-                                    <Input
-                                        id="registry"
-                                        name="registry"
-                                        placeholder="docker.io"
-                                        value="docker.io"
-                                        onChange={inputChangeHandler}
-                                        disabled
-                                    />
+                                <div className="grid gap-3">
+                                    <Label htmlFor="registry">Registry</Label>
+                                    <Input id="registry" name="registry" value={data.registry} disabled />
                                 </div>
                                 <div className="grid gap-3">
-                                    <Label htmlFor="image-name">Image Name</Label>
-                                    <Input
-                                        id="image-name"
-                                        name="imageName"
-                                        placeholder="nginx"
-                                        onChange={inputChangeHandler}
-                                    />
+                                    <Label htmlFor="imageName">Image Name</Label>
+                                    <Input id="imageName" name="imageName" placeholder="eg. nginx" onChange={inputChangeHandler} value={data.imageName} />
                                 </div>
                                 <div className="grid gap-3">
                                     <Label htmlFor="tag">Tag</Label>
-                                    <Input
-                                        id="tag"
-                                        name="tag"
-                                        placeholder="latest"
-                                        onChange={inputChangeHandler}
-                                    />
-                                </div> */}
+                                    <Input id="tag" name="tag" placeholder="eg. latest" onChange={inputChangeHandler} value={data.tag} />
+                                </div>
                             </div>
-                            <DialogFooter className="mt-auto">
-                                <DialogClose asChild>
-                                    <Button variant="outline" onClick={closeHandler}>Cancel</Button>
-                                </DialogClose>
-                                <Button type="submit" disabled={startedPulling}>Pull image
+                            {
+                                data?.imageName && data?.tag && !pullingSuccess && <DialogFooter className="mt-6">
+                                    <Button type="button">Close</Button>
+                                    <Button type="submit" disabled={startedPulling}>{
+                                        startedPulling ? <Loader className="animate-spin" /> : "Pull Image"}
+                                    </Button>
+                                </DialogFooter>
+                            }
+                            {
+                                pullingSuccess && <DialogFooter className="mt-6">
+                                    <Button type="button" onClick={() => resetModal()}>Pull another image</Button>
+                                    <Button type="button" onClick={closeHandler}>Finish</Button>
+                                </DialogFooter>
+                            }
+                        </form>
+                    </div>
+                    <div className="">
+                        {
+                            logs?.length > 0 && <>
+                                <p className="flex items-center gap-2">
                                     {
-                                        startedPulling && <LoaderCircle className="animate-spin" />
+                                        pullingSuccess ? <CheckCheck className="h-3 w-3 mt-[-3px] text-green-400" /> : <Loader className="animate-spin h-3 w-3 mt-[-3px]" />
+                                    }
+                                    <span className={
+                                        twMerge(
+                                            "text-xs text-muted-foreground",
+                                            pullingSuccess ? "text-green-400" : ""
+                                        )
+                                    }>
+                                        {JSON.parse(logs?.[logs.length - 1] || "")?.status ?? logs?.[logs?.length - 1]}
+                                    </span>
+                                </p>
+                                <Button
+                                    onClick={() => setShowLogs(prev => !prev)}
+                                    variant="outline" size="sm" className="mt-4 text-xs cursor-pointer">
+                                    {
+                                        showLogs ? <>
+                                            Hide logs <ChevronUp />
+                                        </> : <>
+                                            See full logs <ChevronDown />
+                                        </>
                                     }
                                 </Button>
-                            </DialogFooter>
-                        </form>
-                    }
+                            </>
+                        }
 
-                    {
-                        logs?.length > 0 && (
-                            <div className="flex flex-col gap-2 mt-5 max-h-[100px] overflow-y-auto overflow-x-auto" ref={containerRef}>
-                                {
-                                    logs?.map((log, index) => {
-                                        const status: string = JSON.parse(log)?.status ?? log;
-
-                                        return (
-                                            <p key={index} className="text-muted-foreground text-xs">{status}</p>
-                                        )
-                                    })
-                                }
-
-                            </div>
-                        )
-                    }
-                    {
-                        startedPulling && <LoaderCircle className="h-3 w-3 text-muted-foreground animate-spin" />
-                    }
-                    {
-                        pullingSuccess && <>
-                            <p className="text-xs text-safe">🧊 Docker image pulled successfully! 🔥</p>
-                            <DialogFooter className="mt-6">
-                                <Button type="button" onClick={() => {
-                                    closeHandler()
-                                    setOpen(false)
-                                }}>
-                                    Finish
-                                </Button>
-                            </DialogFooter>
-                        </>
-                    }
+                        {
+                            showLogs && <PullingImageLogs
+                                imageName={data.imageName}
+                                logs={logs}
+                            />
+                        }
+                    </div>
                 </DialogContent>
-            </Dialog >
+            </Dialog>
         </>
     )
 }

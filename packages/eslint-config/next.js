@@ -46,4 +46,5 @@ export const nextJsConfig = [
       "react/react-in-jsx-scope": "off",
     },
   },
+
 ];

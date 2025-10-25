@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { deleteImage, fetchImagesList } from "../queryFn/images"
+import { deleteImage, fetchImagesList, getImageDetail, searchImages } from "../queryFn/images"
 import { toast } from "sonner"
 
 
@@ -34,5 +34,37 @@ export const useDeleteImageMutation = ({
             toast.error(error.message || "Failed to delete image")
         },
         onSuccess: successHandler
+    })
+}
+
+export const useSearchImagesQuery = ({
+    term,
+    page,
+    limit
+}: {
+    term: string;
+    page?: number;
+    limit?: number
+}) => {
+    return useQuery({
+        queryKey: [`search-images-${term}-${page}-${limit}`],
+        queryFn: () => searchImages({
+            term,
+            page,
+            limit
+        }),
+        enabled: !!term,
+        refetchOnWindowFocus: false
+    })
+}
+
+export const useImageDetail = ({
+    id
+}: {
+    id: string
+}) => {
+    return useQuery({
+        queryKey: [`image-detail-${id}`],
+        queryFn: () => getImageDetail(id)
     })
 }

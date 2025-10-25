@@ -15,17 +15,16 @@ export async function dockerRequest({
             method
         }
 
+        console.log(options)
+
         const req = http.request(options, (res) => {
             let data = ""
             res.on("data", (chunk) => {
+                console.log("chunk", chunk)
                 data += chunk
             })
+
             res.on("end", () => {
-                // try {
-                //     resolve(JSON.parse(data))
-                // } catch (err) {
-                //     resolve(data)
-                // }
 
                 const isJson = res.headers["content-type"]?.includes("application/json")
                 const result = isJson ? JSON.parse(data || "{}") : data
@@ -66,11 +65,13 @@ export async function dockerStreamRequest({
     })
     res.flushHeaders()
 
+
     const options = {
         socketPath: DOCKER_SOCK,
         path,
         method
     }
+
 
     const dockerReq = http.request(options, dockerRes => {
         dockerRes.on('data', chunk => {

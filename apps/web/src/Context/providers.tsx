@@ -3,6 +3,8 @@
 import ThemeBtn from "@/components/theme-btn"
 import { QueryProvider } from "./query-provider"
 import { ThemeProvider } from "./theme-provider"
+import { ImageProvider } from "./image.provider"
+import { ModalProvider } from "./modal-provider"
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -13,7 +15,11 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
                 defaultTheme="dark"
                 disableTransitionOnChange
             >
-                {children}
+                <ModalProvider>
+                    <ImageProvider>
+                        {children}
+                    </ImageProvider>
+                </ModalProvider>
             </ThemeProvider >
         </QueryProvider>
     )

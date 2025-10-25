@@ -1,5 +1,13 @@
 import { z } from 'zod';
 
+export const DockerContainerPort = z.object({
+    PrivatePort: z.number().optional(),
+    PublicPort: z.number().optional(),
+    Type: z.string().optional()
+})
+
+export type IDockerContainerPort = z.infer<typeof DockerContainerPort>
+
 export const DockerContainerSchema = z.object({
     Id: z.string(),
     Names: z.array(z.string()),
@@ -7,7 +15,8 @@ export const DockerContainerSchema = z.object({
     ImageID: z.string(),
     Status: z.string(),
     Created: z.number(),
-    State: z.string()
+    State: z.string(),
+    Ports: z.array(DockerContainerPort)
 })
 
 export type IDockerContainer = z.infer<typeof DockerContainerSchema>
@@ -22,7 +31,8 @@ export const ListImageSchema = z.object({
     SharedSize: z.number(),
     Labels: z.record(z.string(), z.string()).nullable(),
     Containers: z.number(),
-    Manifests: z.any()
+    Manifests: z.any(),
+
 })
 
 export type IListImageSchema = z.infer<typeof ListImageSchema>

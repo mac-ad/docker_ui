@@ -20,30 +20,7 @@ export const ListImagesTableColumns: ColumnDef<any, any>[] = [
 
         }
     },
-    {
-        accessorFn: (row) => {
-            return row["RepoTags"]
-        },
-        header: "Repository",
-        cell: (props) => {
-            return (
-                <div className="flex items-center gap-2">
-                    {
-                        props.getValue()?.map((tag: string) => {
-                            return (
-                                <Badge
-                                    key={tag}
-                                    variant="secondary"
-                                >
-                                    {tag}
-                                </Badge>
-                            )
-                        })
-                    }
-                </div>
-            )
-        }
-    },
+   
     {
         accessorKey: "Size",
         header: "Size",

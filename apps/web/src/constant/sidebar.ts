@@ -9,7 +9,7 @@ export const sidebar_data = {
             icon: IconDashboard,
         },
         {
-            title: "Containes",
+            title: "Containers",
             url: "/containers",
             icon: Archive,
         },
