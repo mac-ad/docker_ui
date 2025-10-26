@@ -3,6 +3,14 @@ export enum DockerApiKey {
     LIST_ALL_CONTAINERS = 'LIST_ALL_CONTAINERS',
     GET_SPECIFIC_CONTAINER = 'GET_SPECIFIC_CONTAINER',
     GET_CONTAINER_STAT = 'GET_CONTAINER_STAT',
+    GET_CONTAINER_PROCESS = 'GET_CONTAINER_PROCESS',
+    START_CONTAINER = 'START_CONTAINER',
+    STOP_CONTAINER = 'STOP_CONTAINER',
+    RESTART_CONTAINER = 'RESTART_CONTAINER',
+    KILL_CONTAINER = 'KILL_CONTAINER',
+    PAUSE_CONTAINER = 'PAUSE_CONTAINER',
+    UNPAUSE_CONTAINER = 'UNPAUSE_CONTAINER',
+    REFRESH_CONTAINER = 'REFRESH_CONTAINER',
 
     LIST_ALL_IMAGES = 'LIST_ALL_IMAGES',
     GET_SPECIFIC_IMAGE = "GET_SPECIFIC_IMAGE",
@@ -19,7 +27,17 @@ export enum DockerApiKey {
 export const DOCKER_API: Record<DockerApiKey, (data?: any) => string> = {
     [DockerApiKey.LIST_ALL_CONTAINERS]: () => `/containers/json?all=1`,
     [DockerApiKey.GET_SPECIFIC_CONTAINER]: (id: string) => `/containers/${id}/json`,
-    [DockerApiKey.GET_CONTAINER_STAT]: (id: string) => `/containers/${id}/stats?stream=false&one-shot=true`,
+    [DockerApiKey.GET_CONTAINER_STAT]: (id: string) => `/containers/${id}/stats?stream=false`,
+    [DockerApiKey.GET_CONTAINER_PROCESS]: (id: string) => `/containers/${id}/top`,
+    [DockerApiKey.START_CONTAINER]: (id: string) => `/containers/${id}/start`,
+    [DockerApiKey.STOP_CONTAINER]: (id: string) => `/containers/${id}/stop`,
+    [DockerApiKey.RESTART_CONTAINER]: (id: string) => `/containers/${id}/restart`,
+    [DockerApiKey.KILL_CONTAINER]: (id: string) => `/containers/${id}/kill`,
+    [DockerApiKey.PAUSE_CONTAINER]: (id: string) => `/containers/${id}/pause`,
+    [DockerApiKey.UNPAUSE_CONTAINER]: (id: string) => `/containers/${id}/unpause`,
+    [DockerApiKey.REFRESH_CONTAINER]: (id: string) => `/containers/${id}/refresh`,
+
+
 
     [DockerApiKey.LIST_ALL_IMAGES]: () => `/images/json?shared-size=1&all=1`,
     [DockerApiKey.GET_SPECIFIC_IMAGE]: (id: string) => `/images/${id}/json`,

@@ -1,5 +1,5 @@
 import { Router, type IRouter, } from "express";
-import { GetContainers, GetContainerStats, GetSpecificContainer } from "../controller/container.controller";
+import { GetContainers, GetContainerStats, GetProcessesInContainer, GetSpecificContainer, PerformActionOnContainer } from "../controller/container.controller";
 
 export const router: IRouter = Router();
 
@@ -14,6 +14,8 @@ router.get(
 
 // stream stat of a container
 router.get("/:id/stats", GetContainerStats)
+router.get("/:id/process", GetProcessesInContainer)
+router.post("/:id", PerformActionOnContainer)
 
 
 export {

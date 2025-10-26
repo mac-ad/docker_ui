@@ -15,12 +15,9 @@ export async function dockerRequest({
             method
         }
 
-        console.log(options)
-
         const req = http.request(options, (res) => {
             let data = ""
             res.on("data", (chunk) => {
-                console.log("chunk", chunk)
                 data += chunk
             })
 
