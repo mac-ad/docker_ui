@@ -51,7 +51,7 @@ export async function dockerStreamRequest({
     path,
     method = "GET",
     req,
-    res,
+    res
 }: IDockerStreamRequest) {
 
     // upgrade http to SSE connection
@@ -76,14 +76,14 @@ export async function dockerStreamRequest({
                 .split('\n')
                 .filter(Boolean)
                 .forEach((line: string) => {
-                    try {
-                        const json = JSON.parse(line);
-                        res.write(`data: ${JSON.stringify(json)}\n\n`);
-                    } catch (err) {
-                        res.write(`data: ${line}\n\n`);
-                    }
+                    // try {
+                    //     const json = JSON.parse(line);
+                    //     console.log("json = ", json)
+                    //     res.write(`data: ${JSON.stringify(json)}\n\n`);
+                    // } catch (err) {
+                    res.write(`data: ${line}\n\n`);
+                    // }
                 });
-
         })
 
         dockerRes.on('end', () => {

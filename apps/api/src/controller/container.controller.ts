@@ -10,7 +10,6 @@ export const GetContainers = async (req: Request, res: Response) => {
             path: DOCKER_API.LIST_ALL_CONTAINERS()
         });
 
-        console.log("Data = ", data)
         const refinedData = data.map((i: any) => (DockerContainerSchema.parse(i)))
 
         successResponse({
@@ -180,6 +179,36 @@ export const PerformActionOnContainer = async (req: Request, res: Response) => {
     } catch (err: any) {
         errorResponse({
             message: "Failed to fetch processes inside container",
+            res,
+            error: err
+        })
+    }
+
+}
+
+export const GetContainerLogs = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+
+
+        return dockerStreamRequest({
+            path: DOCKER_API[DockerApiKey.GET_CONTAINER_LOGS](id),
+            res,
+            req,
+        })
+
+        // const data = await dockerRequest({
+        //     path: DOCKER_API[DockerApiKey.GET_CONTAINER_LOGS](id),
+        // })
+
+        // successResponse({
+        //     res,
+        //     message: "Container logs fetched",
+        //     data
+        // })
+    } catch (err: any) {
+        errorResponse({
+            message: "Failed to fetch logs of container",
             res,
             error: err
         })

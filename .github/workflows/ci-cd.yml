@@ -1,0 +1,48 @@
+name: CI/CD Docker build & push
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu:latest
+    permissions:
+      contents: read
+      packages: write
+    
+    env:
+      GHCR_REGISTRY: ghcr.io
+      IMAGE_NAME_API: ${{ github.repository }}/api
+      IMAGE_NAME_WEB: ${{ github.repository }}/web
+    
+    steps:
+      - name: Checkout repository
+        uses: action/checkout@v3
+
+      - name: Log into github container registry
+        uses: action/login-action@v2
+        with: 
+          registry: ${{ env.GHCR_REGISTRY }}
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }} 
+        
+      - name: Setup node.js
+        uses: action/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install pnpm
+        run: npm install -g pnpm@latest
+      
+      - name: Build docker images
+        run: |
+          docker build -f docker-compose.yml build
+          docker tag docker-ui/api:latest $GHCR_REGISTRY/${{ env.IMAGE_API }}:latest
+          docker tag docker-ui/web:latest $GHCR_REGISTRY/${{ env.IMAGE_WEB }}:latest
+          docker push $GHCR_REGISTRY/${{ env.IMAGE_API }}:latest
+          docker push $GHCR_REGISTRY/${{ env.IMAGE_WEB }}:latest
+        

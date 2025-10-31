@@ -1,35 +1,24 @@
-import express, { Request, Response } from "express";
-import cors from "cors";
+import http from 'http';
+import app from './app';
+import { Server } from 'socket.io';
+import { handleSocket } from './socket';
+import dotenvFlow from 'dotenv-flow';
 
-import { DockerRouter } from './routes/container.route';
-import { ImageRoutes } from "./routes/image.route";
-import { DashboardRoutes } from "./routes/dashboard.route";
+dotenvFlow.config();
 
-const app = express();
+const PORT = process.env.PORT;
 
+const httpServer = http.createServer(app)
 
-declare global {
-    namespace Express {
-        interface Request {
-            parsedQuery: Record<string, unknown>
-        }
-    }
-}
-
-
-app.use(cors());
-app.use(express.json());
-
-
-// entry point
-app.get("/test", (req: Request, res: Response) => {
-    return res.send({
-        status: "ok"
-    })
+// create io server too here
+const io = new Server(httpServer, {
+    cors: {
+        origin: '*'
+    },
 })
 
-app.use("/dashboard", DashboardRoutes);
-app.use("/containers", DockerRouter)
-app.use("/images", ImageRoutes)
+handleSocket(io)
 
-app.listen(4000, () => console.log("🚀 API running on http://localhost:4000"));
+httpServer.listen(PORT, () => {
+    console.log("listening to port " + PORT)
+});

@@ -1,17 +1,14 @@
-
-
-import DashboardMainWrapper from '@/components/dashboard-main-wrapper'
 import React from 'react'
-import ContainerDetail from './ContainerDetail'
+import ContainerStats from '../ContainerStats'
+import DashboardMainWrapper from '@/components/dashboard-main-wrapper'
 
 const page = () => {
-
     return (
         <DashboardMainWrapper
-            title="Container Detail"
+            title="Container Statistics"
             showBackBtn={true}
         >
-            <ContainerDetail />
+            <ContainerStats />
         </DashboardMainWrapper>
     )
 }

@@ -1,6 +1,6 @@
 import { IRouter, Router } from "express";
 import { GetImageList, GetImageDetail, DeleteImage, CreateImage, SearchImage, GetTags, GetImageHistory } from "../controller/image.controller";
-import { paginationSchema } from "@repo/shared/src/types/pagination";
+import { paginationSchema } from "@repo/shared";
 import { validateQuery } from "../middleware/validateQuery";
 
 import { z } from 'zod';

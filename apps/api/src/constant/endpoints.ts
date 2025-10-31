@@ -11,6 +11,7 @@ export enum DockerApiKey {
     PAUSE_CONTAINER = 'PAUSE_CONTAINER',
     UNPAUSE_CONTAINER = 'UNPAUSE_CONTAINER',
     REFRESH_CONTAINER = 'REFRESH_CONTAINER',
+    GET_CONTAINER_LOGS = 'GET_CONTAINER_LOGS',
 
     LIST_ALL_IMAGES = 'LIST_ALL_IMAGES',
     GET_SPECIFIC_IMAGE = "GET_SPECIFIC_IMAGE",
@@ -36,6 +37,7 @@ export const DOCKER_API: Record<DockerApiKey, (data?: any) => string> = {
     [DockerApiKey.PAUSE_CONTAINER]: (id: string) => `/containers/${id}/pause`,
     [DockerApiKey.UNPAUSE_CONTAINER]: (id: string) => `/containers/${id}/unpause`,
     [DockerApiKey.REFRESH_CONTAINER]: (id: string) => `/containers/${id}/refresh`,
+    [DockerApiKey.GET_CONTAINER_LOGS]: (id: string) => `/containers/${id}/logs?stdout=1&stderr=1&follow=1`,
 
 
 

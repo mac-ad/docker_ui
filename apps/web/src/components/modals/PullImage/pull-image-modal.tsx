@@ -70,7 +70,7 @@ const PullImageModal = ({
     const submitHandler = async (e: React.FormEvent) => {
         e.preventDefault();
         setStartedPulling(true);
-        const url = `http://localhost:4000/images/create?imageName=${data.imageName}&tag=${data.tag}`
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/images/create?imageName=${data.imageName}&tag=${data.tag}`
         let es = ES.current;
 
         es = new EventSource(url);

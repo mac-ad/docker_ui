@@ -1,0 +1,26 @@
+services:
+  api:
+    container_name: docker-ui-api
+    image: docker-ui/api:latest 
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    restart: always
+    ports:
+      - "${PORT:-4000}:4000"
+    environment:
+      - PORT=4000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: root
+
+  web:
+    container_name: docker-ui-web
+    image: docker-ui/web:latest 
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+  

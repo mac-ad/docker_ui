@@ -8,5 +8,5 @@ export type IDockerRequest = {
 
 export type IDockerStreamRequest = IDockerRequest & {
     req: Request,
-    res: Response
+    res: Response;
 }

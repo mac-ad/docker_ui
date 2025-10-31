@@ -37,6 +37,12 @@ export const getNameFromTag = (tag: string) => {
     return split?.[0]
 }
 
+export const getContainerName = (name: string) => {
+    const split = name?.split("/");
+
+    return split?.length === 1 ? name : split?.[split?.length - 1]
+}
+
 export const getInformaticPorts = (ports: IDockerContainerPort[]): Set<string> => {
     let str = new Set<string>();
 
@@ -49,4 +55,50 @@ export const getInformaticPorts = (ports: IDockerContainerPort[]): Set<string> =
     }
 
     return str
+}
+
+
+export const getCpuUsagePercentage = ({
+    currentCpu,
+    preCpu,
+    onlineCpu
+}: {
+    currentCpu: {
+        total_usage: number;
+        system_cpu_usage: number;
+    };
+    preCpu: {
+        total_usage: number;
+        system_cpu_usage: number;
+    },
+    onlineCpu: number
+}) => {
+
+    console.log({
+        currentCpu,
+        preCpu
+    })
+
+    const cpuDelta = currentCpu.total_usage - preCpu.total_usage;
+    const sysDelta = currentCpu.system_cpu_usage - preCpu.system_cpu_usage;
+
+    const cpuPercentage = sysDelta > 0 ? (cpuDelta / sysDelta) * onlineCpu * 100 : 0;
+
+    return cpuPercentage.toFixed(2);
+}
+
+
+// to fix later
+export const getMemoryPercentage = ({
+    used,
+    total
+}: {
+    used: number;
+    total: number
+}) => {
+    console.log({
+        total,
+        used
+    })
+    return ((used / total) * 100).toFixed(1);
 }

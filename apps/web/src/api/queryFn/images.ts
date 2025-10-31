@@ -1,6 +1,6 @@
 
 export const fetchImagesList = async (): Promise<any> => {
-    const res: any = await fetch("http://localhost:4000/images").then(res => res.json());
+    const res: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/images`).then(res => res.json());
 
     console.log("res = ", res)
 
@@ -8,7 +8,7 @@ export const fetchImagesList = async (): Promise<any> => {
 }
 
 export const deleteImage = async (id: string) => {
-    const res = await fetch(`http://localhost:4000/images/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/images/${id}`, {
         method: "DELETE"
     })
     const data = await res.json()
@@ -34,7 +34,7 @@ export const searchImages = async ({
 }) => {
     // const res = await fetch(`https://hub.docker.com/v2/search/repositories?query=${term}&page_size=${limit}`);
 
-    const res = await fetch(`http://localhost:4000/images/search?term=${term}&page=${page}&limit=${limit}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/images/search?term=${term}&page=${page}&limit=${limit}`, {
         method: "GET"
     })
 
@@ -62,7 +62,7 @@ export const getTags = async ({
 }) => {
     // const res = await fetch(`https://hub.docker.com/v2/search/repositories?query=${term}&page_size=${limit}`);
 
-    const res = await fetch(`http://localhost:4000/images/search?term=${term}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/images/search?term=${term}`, {
         method: "GET"
     })
 
@@ -86,7 +86,7 @@ export const getTags = async ({
 export const getImageDetail = async (id: string) => {
     // const res = await fetch(`https://hub.docker.com/v2/search/repositories?query=${term}&page_size=${limit}`);
 
-    const res = await fetch(`http://localhost:4000/images/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/images/${id}`, {
         method: "GET"
     })
 
