@@ -24,15 +24,14 @@ export type IDockerContainer = z.infer<typeof DockerContainerSchema>
 export const ListImageSchema = z.object({
     Id: z.string(),
     ParentId: z.string(),
-    RepoTags: z.array(z.string()),
-    RepoDigests: z.array(z.string()),
+    RepoTags: z.array(z.string().optional()).nullable(),
+    RepoDigests: z.array(z.string().optional()).nullable(),
     Created: z.number(),
     Size: z.number(),
     SharedSize: z.number(),
     Labels: z.record(z.string(), z.string()).nullable(),
     Containers: z.number(),
     Manifests: z.any(),
-
 })
 
 export type IListImageSchema = z.infer<typeof ListImageSchema>

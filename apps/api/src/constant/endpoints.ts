@@ -22,6 +22,9 @@ export enum DockerApiKey {
 
     GET_IMAGE_HISTORY = 'GET_IMAGE_HISTORY',
     GET_SYSTEM_INFO = "GET_SYSTEM_INFO",
+    GET_SYSTEM_DATA_USAGE = "GET_SYSTEM_DATA_USAGE",
+
+    GET_NETWORKS_LIST = "GET_NETWORKS_LIST"
 }
 
 
@@ -40,7 +43,6 @@ export const DOCKER_API: Record<DockerApiKey, (data?: any) => string> = {
     [DockerApiKey.GET_CONTAINER_LOGS]: (id: string) => `/containers/${id}/logs?stdout=1&stderr=1&follow=1`,
 
 
-
     [DockerApiKey.LIST_ALL_IMAGES]: () => `/images/json?shared-size=1&all=1`,
     [DockerApiKey.GET_SPECIFIC_IMAGE]: (id: string) => `/images/${id}/json`,
     [DockerApiKey.DELETE_IMAGE]: (id: string) => `/images/${id}`,
@@ -50,6 +52,9 @@ export const DOCKER_API: Record<DockerApiKey, (data?: any) => string> = {
 
 
     [DockerApiKey.GET_SYSTEM_INFO]: () => `/info`,
+    [DockerApiKey.GET_SYSTEM_DATA_USAGE]: () => `/system/df`,
+
+    [DockerApiKey.GET_NETWORKS_LIST]: () => `/networks`
 }
 
 export type IDockerApiKey = keyof typeof DOCKER_API;
