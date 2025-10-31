@@ -34,10 +34,10 @@ jobs:
         with:
           node-version: '20'
 
-       - name: Enable pnpm via Corepack
+      - name: Enable pnpm via Corepack
         run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
+            corepack enable
+            corepack prepare pnpm@latest --activate
 
       - name: Verify pnpm
         run: |
