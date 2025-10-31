@@ -46,8 +46,8 @@ jobs:
       - name: Build docker images
         run: |
           docker compose -f docker-compose.yml build
-          docker tag docker-ui/api:latest $GHCR_REGISTRY/${{ env.IMAGE_API }}:latest
-          docker tag docker-ui/web:latest $GHCR_REGISTRY/${{ env.IMAGE_WEB }}:latest
-          docker push $GHCR_REGISTRY/${{ env.IMAGE_API }}:latest
-          docker push $GHCR_REGISTRY/${{ env.IMAGE_WEB }}:latest
+          docker tag docker-ui/api:latest $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest
+          docker tag docker-ui/web:latest $GHCR_REGISTRY/${{ env.IMAGE_NAME_WEB }}:latest
+          docker push $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest
+          docker push $GHCR_REGISTRY/${{ env.IMAGE_NAME_WEB }}:latest
         
