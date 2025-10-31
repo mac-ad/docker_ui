@@ -1,7 +1,7 @@
 services:
   api:
     container_name: docker-ui-api
-    image: ghcr.io/mac-ad/docker-ui/api:latest 
+    image: ghcr.io/mac-ad/docker_ui/api:latest 
     restart: always
     ports:
       - "${PORT:-4000}:4000"
@@ -13,7 +13,7 @@ services:
 
   web:
     container_name: docker-ui-web
-    image: ghcr.io/mac-ad/docker-ui/web:latest 
+    image: ghcr.io/mac-ad/docker_ui/web:latest 
     restart: always
     ports:
       - "5000:3000"
