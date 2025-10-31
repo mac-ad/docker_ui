@@ -36,8 +36,14 @@ jobs:
           cache: 'pnpm'
       
       - name: Install pnpm
-        run: npm install -g pnpm@latest
+        run: corepack enable && corepack prepare pnpm@latest --activate
       
+      - name: Check pnpm
+        run: |
+          pnpm --version
+          which pnpm
+          echo $PATH
+
       - name: Build docker images
         run: |
           docker build -f docker-compose.yml build
