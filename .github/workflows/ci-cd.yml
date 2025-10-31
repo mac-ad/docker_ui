@@ -33,16 +33,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'pnpm'
-      
-      - name: Install pnpm
-        run: corepack enable && corepack prepare pnpm@latest --activate
-      
-      - name: Check pnpm
+
+       - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: Verify pnpm
         run: |
           pnpm --version
-          which pnpm
-          echo $PATH
 
       - name: Build docker images
         run: |
