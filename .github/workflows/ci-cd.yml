@@ -20,17 +20,17 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: action/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Log into github container registry
-        uses: action/login-action@v2
+        uses: actions/login-action@v2
         with: 
           registry: ${{ env.GHCR_REGISTRY }}
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }} 
         
       - name: Setup node.js
-        uses: action/setup-node@v3
+        uses: actions/setup-node@v3
         with:
           node-version: '20'
           cache: 'pnpm'
