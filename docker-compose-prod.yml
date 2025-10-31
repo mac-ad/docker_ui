@@ -1,0 +1,20 @@
+services:
+  api:
+    container_name: docker-ui-api
+    image: ghcr.io/mac-ad/docker-ui/api:latest 
+    restart: always
+    ports:
+      - "${PORT:-4000}:4000"
+    environment:
+      - PORT=4000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: root
+
+  web:
+    container_name: docker-ui-web
+    image: ghcr.io/mac-ad/docker-ui/web:latest 
+    restart: always
+    ports:
+      - "3000:3000"
+  
