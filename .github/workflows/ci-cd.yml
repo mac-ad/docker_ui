@@ -53,14 +53,8 @@ jobs:
       
       - name: Build docker images
         run: |
-          docker buildx build |
-            --platform linux/amd64, linux/arm64 |
-            -t $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest
-            -f ./apps/api/Dockerfile .
+          docker buildx build --platform linux/amd64, linux/arm64 -t $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest -f ./apps/api/Dockerfile .
           docker push $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest
 
-          docker buildx build \
-            --platform linux/amd64,linux/arm64 \
-            -t $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest \
-            -f ./apps/web/Dockerfile . \
+          docker buildx build --platform linux/amd64,linux/arm64 -t $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest -f ./apps/web/Dockerfile . \
           docker push $GHCR_REGISTRY/${{ env.IMAGE_NAME_WEB }}:latest
