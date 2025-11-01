@@ -64,6 +64,7 @@ jobs:
           # Build and push API image
           docker buildx build \
             --platform linux/amd64,linux/arm64 \
+            --cache-from=type=registry,ref=$GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest \
             -t $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest \
             -f ./apps/api/Dockerfile \
             --push \
@@ -73,6 +74,8 @@ jobs:
           # Build and push Web image
           docker buildx build \
             --platform linux/amd64,linux/arm64 \
+            --build-arg NEXT_PUBLIC_API_URL=http://localhost:7000 \
+            --cache-from=type=registry,ref=$GHCR_REGISTRY/${{ env.IMAGE_NAME_WEB }}:latest \
             -t $GHCR_REGISTRY/${{ env.IMAGE_NAME_WEB }}:latest \
             -f ./apps/web/Dockerfile \
             --push \
