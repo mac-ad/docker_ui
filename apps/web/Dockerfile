@@ -46,7 +46,11 @@ USER nextjs
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 
+COPY ./env.sh ./env.sh
+RUN chmod +x ./env.sh
+
 EXPOSE 3000
 
 # ✅ Correct entrypoint for Next.js standalone
-CMD ["node", "./apps/web/server.js"]
+# CMD ["node", "./apps/web/server.js"]
+CMD ["./env.sh"]
