@@ -13,8 +13,10 @@ RUN mkdir -p $PNPM_HOME
 FROM base AS builder
 
 WORKDIR /app
+
 RUN pnpm add -g turbo
 COPY . .
+
 RUN turbo prune web --docker
 
 FROM base AS installer
@@ -24,6 +26,10 @@ COPY --from=builder /app/out/json/ .
 RUN pnpm install --frozen-lockfile
 
 COPY --from=builder /app/out/full/ .
+
+# Accept the build argument
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 
 RUN pnpx turbo build

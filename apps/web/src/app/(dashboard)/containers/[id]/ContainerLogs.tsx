@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { useParams } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { toast } from 'sonner';
 import AnsiToHtml from 'ansi-to-html';
 import { Button } from '@/components/ui/button';

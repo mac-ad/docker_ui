@@ -11,16 +11,16 @@ import { Button } from '@/components/ui/button';
 
 const DashboardDetail = () => {
 
-    const { data: dashboardRef } = useDashboardQuery();
+    const { data: dashboardRef, isLoading } = useDashboardQuery();
 
     const dashboard = useMemo(() => dashboardRef?.data, [dashboardRef])
 
-    console.log(dashboard)
 
     return (
         <div className="grid gap-4">
             <DashboardCards
                 data={dashboard}
+                loading={isLoading}
             />
 
             {/* system info */}
@@ -33,6 +33,7 @@ const DashboardDetail = () => {
                 </CardHeader>
                 <CardContent>
                     <TabularData
+                        loading={isLoading}
                         data={{
                             "Operating System": dashboard?.host?.os,
                             "OS Type": dashboard?.host?.osType,
