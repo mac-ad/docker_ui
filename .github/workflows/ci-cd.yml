@@ -59,7 +59,7 @@ jobs:
             -t $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest \
             -f ./apps/api/Dockerfile \
             --push \
-            ./apps/api
+            .
 
 
           # Build and push Web image
@@ -68,5 +68,5 @@ jobs:
             -t $GHCR_REGISTRY/${{ env.IMAGE_NAME_WEB }}:latest \
             -f ./apps/web/Dockerfile \
             --push \
-            ./apps/web
+            .
 
