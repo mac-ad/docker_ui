@@ -43,11 +43,24 @@ jobs:
         run: |
           pnpm --version
 
+      # - name: Build docker images
+        # run: |
+        #   docker compose -f docker-compose.yml build
+        #   docker tag docker-ui/api:latest $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest
+        #   docker tag docker-ui/web:latest $GHCR_REGISTRY/${{ env.IMAGE_NAME_WEB }}:latest
+        #   docker push $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest
+        #   docker push $GHCR_REGISTRY/${{ env.IMAGE_NAME_WEB }}:latest
+      
       - name: Build docker images
         run: |
-          docker compose -f docker-compose.yml build
-          docker tag docker-ui/api:latest $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest
-          docker tag docker-ui/web:latest $GHCR_REGISTRY/${{ env.IMAGE_NAME_WEB }}:latest
+          docker buildx build |
+            --platform linux/amd64, linux/arm64 |
+            -t $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest
+            -f ./apps/api/Dockerfile .
           docker push $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest
+
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            -t $GHCR_REGISTRY/${{ env.IMAGE_NAME_API }}:latest \
+            -f ./apps/web/Dockerfile . \
           docker push $GHCR_REGISTRY/${{ env.IMAGE_NAME_WEB }}:latest
-        
