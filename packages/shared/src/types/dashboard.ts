@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { DockerContainerSchema, ListImageSchema } from './docker';
+import { DockerContainerSchema } from './container.types';
+import { ListImageSchema } from './image.types';
 
 export const SystemInfoSchema = z.object({
     ID: z.string(),

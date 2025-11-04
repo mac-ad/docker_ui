@@ -1,4 +1,4 @@
-import { IDockerContainerPort } from "../types/docker";
+import { IDockerContainerPort } from "../types/container.types";
 
 export const formatNumber = (num: number) => {
     if (num < 1000) return num.toString();

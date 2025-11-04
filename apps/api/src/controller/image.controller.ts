@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import { errorResponse, successResponse } from "../utils/api"
 import { dockerRequest, dockerStreamRequest } from "../utils/docker"
 import { DOCKER_API, DockerApiKey } from "../constant/endpoints"
-import { IDockerContainer, IListImageSchema, ListImageSchema } from "@repo/shared"
+import { DeleteImageData, IDeleteImageData, IListImageSchema, ListImageSchema } from "@repo/shared"
 
 export const GetImageList = async (req: Request, res: Response) => {
     try {
@@ -11,8 +11,6 @@ export const GetImageList = async (req: Request, res: Response) => {
         console.log(limit)
 
         const queryParams: string = `?page=${page}&limit=${limit}&search=${search}`;
-
-
 
         const data: IListImageSchema[] = await dockerRequest({
             path: DOCKER_API.LIST_ALL_IMAGES(),
@@ -65,13 +63,15 @@ export const GetImageDetail = async (req: Request, res: Response) => {
 
 export const DeleteImage = async (req: Request, res: Response) => {
     try {
-
         const { id } = req.params;
 
-        const data = await dockerRequest({
+        const dockerRes = await dockerRequest({
             path: DOCKER_API.DELETE_IMAGE(id),
             method: "DELETE"
         })
+
+
+        const data = DeleteImageData.parse(dockerRes)
 
         successResponse({
             res,

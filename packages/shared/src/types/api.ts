@@ -1,14 +1,13 @@
-import { IListImageSchema } from "./docker";
+import { nullable, z } from 'zod';
 
+export const ApiSuccessResponseBase = z.object({
+    message: z.string()
+})
 
-export interface ApiResponseBase {
+export const ApiErrorResponseBase = z.object({
+    message: z.string(),
+    error: z.any(),
+    data: z.any().nullable()
+})
 
-}
-
-export interface SuccessResponss {
-
-}
-
-export interface ErrorResponse {
-
-}
+export type IApiErrorResponseBase = z.infer<typeof ApiErrorResponseBase>

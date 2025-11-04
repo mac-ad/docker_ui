@@ -12,7 +12,8 @@ const app: Express = express();
 declare global {
     namespace Express {
         interface Request {
-            parsedQuery: Record<string, unknown>
+            parsedQuery: Record<string, unknown>;
+            parsedBody: Record<string, unknown>;
         }
     }
 }

@@ -1,23 +1,48 @@
 import { Request, Response } from 'express'
-import { CONTAINER_ACTION, ContainerActionType, DockerContainerSchema, IDockerContainer } from "@repo/shared";
+import { CONTAINER_ACTION, ContainerActionType, ContainerDetail, ContainerProcesses, ContainerStat, createContainerSchema, DockerContainerSchema, IDockerContainer, IGetAllContainersResponse } from "@repo/shared";
 import { dockerRequest, dockerStreamRequest } from "../utils/docker";
 import { errorResponse, successResponse } from "../utils/api";
 import { DOCKER_API, DockerApiKey } from "../constant/endpoints";
+import { z } from 'zod';
 
-export const GetContainers = async (req: Request, res: Response) => {
+
+export const CreateContainer = async (req: Request, res: Response) => {
     try {
-        const data: IDockerContainer[] = await dockerRequest({
+
+        const bodyData = req.parsedBody as z.infer<typeof createContainerSchema>
+
+        successResponse({
+            res,
+            status: 201,
+            data: {
+                res: "ok"
+            },
+            message: "Container Created Successfully!!"
+        })
+
+    } catch (err) {
+        errorResponse({
+            res,
+            error: err
+        })
+    }
+}
+
+
+export const GetContainers = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const data = await dockerRequest({
             path: DOCKER_API.LIST_ALL_CONTAINERS()
         });
 
-        const refinedData = data.map((i: any) => (DockerContainerSchema.parse(i)))
+        const refinedData: IDockerContainer[] = data.map((i: any) => (DockerContainerSchema.parse(i)))
 
         successResponse({
             data: refinedData,
             message: "Containers list fetched successfully",
             res
         })
-    } catch (err) {
+    } catch (err: any) {
         errorResponse({
             message: "Failed fetching containers list",
             res,
@@ -31,9 +56,11 @@ export const GetSpecificContainer = async (req: Request, res: Response) => {
 
         const { id } = req.params;
 
-        const data = await dockerRequest({
+        const dockerRes = await dockerRequest({
             path: DOCKER_API.GET_SPECIFIC_CONTAINER(id)
         })
+
+        const data = ContainerDetail.parse(dockerRes)
 
         successResponse({
             data,
@@ -55,15 +82,11 @@ export const GetContainerStats = async (req: Request, res: Response) => {
 
         const { id } = req.params;
 
-        // return dockerStreamRequest({
-        //     path: DOCKER_API[DockerApiKey.GET_CONTAINER_STAT](id),
-        //     req,
-        //     res
-        // })
-
-        const data = await dockerRequest({
+        const dockerRes = await dockerRequest({
             path: DOCKER_API[DockerApiKey.GET_CONTAINER_STAT](id)
         })
+
+        const data = ContainerStat.parse(dockerRes)
 
         successResponse({
             res,
@@ -85,15 +108,11 @@ export const GetProcessesInContainer = async (req: Request, res: Response) => {
 
         const { id } = req.params;
 
-        // return dockerStreamRequest({
-        //     path: DOCKER_API[DockerApiKey.GET_CONTAINER_STAT](id),
-        //     req,
-        //     res
-        // })
-
-        const data = await dockerRequest({
+        const dockerRes = await dockerRequest({
             path: DOCKER_API[DockerApiKey.GET_CONTAINER_PROCESS](id)
         })
+
+        const data = ContainerProcesses.parse(dockerRes)
 
         successResponse({
             res,
@@ -111,16 +130,12 @@ export const GetProcessesInContainer = async (req: Request, res: Response) => {
 }
 
 
+// TO DO: make this endpoints typesafe later
 export const PerformActionOnContainer = async (req: Request, res: Response) => {
     try {
-        console.log("performing")
         const { id } = req.params;
         console.log(req.body)
         const { action } = req.body
-
-        console.log("action", action)
-
-
 
         let path: string | null = null;
 
@@ -163,17 +178,15 @@ export const PerformActionOnContainer = async (req: Request, res: Response) => {
             return
         }
 
-        console.log("path", path)
 
         const data = await dockerRequest({
             path,
             method: "POST"
         })
-        console.log(data)
 
         successResponse({
             res,
-            message: "Container processes fetched",
+            message: "Container actions executed",
             data
         })
     } catch (err: any) {

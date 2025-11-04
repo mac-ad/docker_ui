@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { GenericTable } from '@/components/generic-table';
 import { ColumnDef } from '@tanstack/react-table';
@@ -24,7 +24,9 @@ const ImagesPage = () => {
     const [currentRowId, setCurrentRowId] = useState<string | null>(null);
 
     const { data: imagesResponse, isLoading } = useImageQuery();
-    const data = imagesResponse?.data
+    const data = useMemo(() => imagesResponse?.data, [imagesResponse])
+
+    console.log('image = ', imagesResponse)
 
     // pull image modal
     const [showPullImageModal, setShowPullImageModal] = useState<boolean>(false);
@@ -33,19 +35,21 @@ const ImagesPage = () => {
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [currentlyDeleting, setCurrentlyDeleting] = useState<string | null>(null)
 
-    const { mutate: deleteImage, mutateAsync: deleteImageAsync, isLoading: deleting } = useDeleteImageMutation({
-        onSuccess: () => {
-            setShowDeleteModal(false);
-            setCurrentRowId(null)
-        }
-    });
+    const { mutate: deleteImage, mutateAsync: deleteImageAsync, isLoading: deleting } = useDeleteImageMutation();
 
     const router = useRouter()
 
     const deleteHandler = async () => {
         if (!currentRowId) return;
         try {
-            deleteImage(currentRowId)
+            deleteImage(currentRowId,
+                {
+                    onSuccess: () => {
+                        setShowDeleteModal(false);
+                        setCurrentRowId(null)
+                    }
+                }
+            )
         } catch (err) {
             console.log(err)
         }
@@ -54,7 +58,21 @@ const ImagesPage = () => {
     const deleteSpecificTagHandler = async () => {
         if (!currentlyDeleting) return;
         try {
-            deleteImage(currentlyDeleting)
+            deleteImage(currentlyDeleting,
+                {
+                    onSuccess: (data) => {
+                        setShowDeleteModal(false);
+                        setCurrentRowId(null)
+                        toast.success(data?.message || "Image tag deleted successfully")
+                    },
+                    onError: (error) => {
+                        setShowDeleteModal(false);
+                        setCurrentRowId(null)
+                        console.log("ERror = ", error)
+                        toast.error(error?.message || "Failed to delete")
+                    }
+                }
+            )
         } catch (err) {
             console.log(err)
         }
@@ -206,6 +224,8 @@ const ImagesPage = () => {
 
         }
     ]
+
+    console.log("data = ", data)
 
     return (
         <DashboardMainWrapper

@@ -1,28 +1,16 @@
 "use client";
 
 import { useContainerProcess } from '@/api/queries/containers';
-import { GenericTable } from '@/components/generic-table';
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ColumnDef } from '@tanstack/react-table';
 import { Gpu } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 const ContainerProcess = () => {
     const { id } = useParams();
 
     const { data: process } = useContainerProcess({ id: id as string })
-
-    console.log(process, 'process')
-
-    const columns: ColumnDef<any, any> = useMemo(() => {
-        return process?.data?.Titles?.map((title: string) => ({
-            accessorKey: title,
-            header: title,
-        }))
-    }, [process?.data?.Titles])
-
 
     return (
         <Card className="col-span-full">
@@ -33,10 +21,7 @@ const ContainerProcess = () => {
                 </div>
             </CardHeader>
             <CardContent>
-                {/* <GenericTable 
-                    columns = {columns}
-                    data = {data}
-                /> */}
+
                 <Table>
                     <TableHeader>
                         <TableRow>

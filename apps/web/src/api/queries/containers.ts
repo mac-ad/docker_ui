@@ -1,17 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { fetchContainerDetail, fetchContainerProcess, fetchContainersList, fetchContainerStat, performContainerAction } from "../queryFn/containers"
-import { CONTAINER_ACTION, ContainerActionType } from "@repo/shared"
+import { ContainerActionType, IGetAllContainersResponse, IGetContainerDetailResponse, IGetContainerProcessesResponse, IGetContainerStatsResponse } from "@repo/shared"
 import { toast } from "sonner"
+import { IApiErrorResponseBase } from "../../../../../packages/shared/src/types/api"
 
 export const useContainersQuery = () => {
-    return useQuery({
+    return useQuery<IGetAllContainersResponse, IApiErrorResponseBase>({
         queryKey: ['containersList'],
         queryFn: fetchContainersList
     })
 }
 
 export const useContainerDetailQuery = (id: string) => {
-    return useQuery({
+    return useQuery<IGetContainerDetailResponse, IApiErrorResponseBase>({
         queryKey: [`container-${id}`],
         queryFn: () => fetchContainerDetail(id)
     })
@@ -22,7 +23,7 @@ export const useContainerStat = ({ id, refresh_interval, enabled }: {
     refresh_interval: number
     enabled: boolean;
 }) => {
-    return useQuery({
+    return useQuery<IGetContainerStatsResponse, IApiErrorResponseBase>({
         queryKey: [`containerStat-${id}`],
         queryFn: () => fetchContainerStat(id),
         refetchInterval: refresh_interval, // fetch every 5 seconds
@@ -36,12 +37,13 @@ export const useContainerProcess = ({
 }: {
     id: string
 }) => {
-    return useQuery({
+    return useQuery<IGetContainerProcessesResponse, IApiErrorResponseBase>({
         queryKey: [`containerProcess-${id}`],
         queryFn: () => fetchContainerProcess(id)
     })
 }
 
+// TO DO: make this endpoints typesafe later
 export const useContainerActionMutation = (id: string, action: ContainerActionType | null) => {
 
     const queryClient = useQueryClient();

@@ -14,10 +14,11 @@ const ContainerDetail = () => {
 
     const { id } = useParams();
 
-    const { data } = useContainerDetailQuery(id as string)
+    const { data, isLoading } = useContainerDetailQuery(id as string)
 
     const container = useMemo(() => data?.data, [data])
 
+    if (isLoading || !data) return null;
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -32,16 +33,16 @@ const ContainerDetail = () => {
             <div className="col-span-full">
                 <ContainerStatus
                     data={{
-                        ID: container?.Id,
-                        Name: container?.Name,
-                        Created: formatUnixTimestamp(container?.Created),
-                        StartTime: formatUnixTimestamp(container?.State?.StartedAt),
-                        Path: container?.Path,
-                        RestartCount: container?.RestartCount,
-                        Platform: container?.Platform,
-                        Image: container?.Image,
-                        LogPath: container?.LogPath,
-                        AppArmorProfile: container?.AppArmorProfile,
+                        ID: container?.Id ?? "",
+                        Name: container?.Name ?? "",
+                        Created: formatUnixTimestamp(Number(container?.Created)),
+                        StartTime: formatUnixTimestamp(Number(container?.State?.StartedAt)),
+                        Path: container?.Path ?? "",
+                        // RestartCount: container?.RestartCount,
+                        Platform: container?.Platform ?? "",
+                        Image: container?.Image ?? "",
+                        LogPath: container?.LogPath ?? "",
+                        AppArmorProfile: container?.AppArmorProfile ?? "",
                     }}
                 />
             </div>

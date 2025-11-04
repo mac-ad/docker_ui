@@ -1,8 +1,7 @@
 "use client";
 
 import { useContainerStat } from '@/api/queries/containers';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Cable, Cpu, Gpu, Network } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { useParams } from 'next/navigation'
 import React from 'react'
 import MemoryUsage from './MemoryUsage';
@@ -20,11 +19,13 @@ const ContainerStats = ({
 }) => {
     const { id } = useParams()
 
-    const { data: stat } = useContainerStat({
+    const { data: stat, error, isLoading } = useContainerStat({
         id: id as string,
         refresh_interval: REFRESH_INTERVAL,
         enabled: running
     })
+
+    if (isLoading || !stat) return null;
 
     return (
         <>
@@ -67,14 +68,14 @@ const ContainerStats = ({
                 <NetworkUsage
                     data={stat?.data?.networks}
                     refresh_interval={REFRESH_INTERVAL}
-                    time={stat?.data?.read}
+                    time={parseInt(stat?.data?.read)}
                 />
 
                 <IOUsage
                     data={{
-                        time: stat?.data?.read,
-                        read: stat?.data?.blkio_stats?.io_service_bytes_recursive?.find((item: any) => item.op === "read")?.value,
-                        write: stat?.data?.blkio_stats?.io_service_bytes_recursive?.find((item: any) => item.op === "write")?.value,
+                        time: parseInt(stat?.data?.read),
+                        read: stat?.data?.blkio_stats?.io_service_bytes_recursive?.find((item: any) => item.op === "read")?.value ?? 0,
+                        write: stat?.data?.blkio_stats?.io_service_bytes_recursive?.find((item: any) => item.op === "write")?.value ?? 0,
                     }}
                     refresh_interval={REFRESH_INTERVAL}
                 />

@@ -66,8 +66,6 @@ const NetworkUsage = ({
         ]))
     }, [data])
 
-    console.log(chartData, 'chart')
-
     return (
         <Card>
             <CardHeader>

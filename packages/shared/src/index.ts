@@ -1,5 +1,5 @@
-export * from './types/docker';
-export * from './types/api'
+export * from './types/container.types'
+export * from './types/image.types'
 export * from './types/pagination'
 export * from './types/dashboard'
 export * from './types/networks'

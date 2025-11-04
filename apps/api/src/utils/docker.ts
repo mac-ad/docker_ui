@@ -22,7 +22,6 @@ export async function dockerRequest({
             })
 
             res.on("end", () => {
-
                 const isJson = res.headers["content-type"]?.includes("application/json")
                 const result = isJson ? JSON.parse(data || "{}") : data
 

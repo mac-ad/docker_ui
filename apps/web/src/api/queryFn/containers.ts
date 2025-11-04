@@ -1,18 +1,33 @@
 import { ContainerActionType } from "@repo/shared";
 
-export const fetchContainersList = async (): Promise<any> => {
-    const res: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/containers`).then(res => res.json());
-    return res
+export const fetchContainersList = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/containers`)
+
+    if (!res.ok) {
+        throw await res.json();
+    }
+
+    return await res.json()
 }
 
-export const fetchContainerStat = async (id: string): Promise<any> => {
-    const res: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/containers/${id}/stats`).then(res => res.json());
-    return res
+export const fetchContainerStat = async (id: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/containers/${id}/stats`);
+
+    if (!res.ok) {
+        throw await res.json();
+    }
+
+    return await res.json()
 }
 
 export const fetchContainerProcess = async (id: string): Promise<any> => {
-    const res: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/containers/${id}/process`).then(res => res.json());
-    return res
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/containers/${id}/process`);
+
+    if (!res.ok) {
+        throw await res.json();
+    }
+
+    return await res.json()
 }
 
 export const performContainerAction = async ({
@@ -21,8 +36,8 @@ export const performContainerAction = async ({
 }: {
     id: string;
     action: ContainerActionType
-}): Promise<any> => {
-    const res: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/containers/${id}`, {
+}) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/containers/${id}`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -31,10 +46,22 @@ export const performContainerAction = async ({
             action
         })
     })
-    return res;
+
+
+    if (!res.ok) {
+        throw await res.json();
+    }
+
+    return await res.json();
 }
 
 export const fetchContainerDetail = async (id: string) => {
-    const res: any = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/containers/${id}`).then(res => res.json());
-    return res
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/containers/${id}`);
+
+    if (!res.ok) {
+        throw res.json();
+    }
+
+
+    return res.json()
 }

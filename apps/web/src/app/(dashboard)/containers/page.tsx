@@ -19,13 +19,12 @@ import { Badge } from '@/components/ui/badge';
 import { useRouter } from 'next/navigation';
 import { getInformaticPorts } from '@repo/shared';
 import { twMerge } from 'tailwind-merge';
-import Link from 'next/link';
 
 const ContainerPage = () => {
     const [copied, setCopied] = useState<boolean>(false)
     const [currentRowId, setCurrentRowId] = useState<string | null>(null);
 
-    const { data: imagesResponse, isLoading } = useContainersQuery();
+    const { data: imagesResponse, isLoading, error } = useContainersQuery();
     const data = imagesResponse?.data
 
     // pull image modal
@@ -34,22 +33,26 @@ const ContainerPage = () => {
     // delete image
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
-    const { mutate: deleteImage, mutateAsync: deleteImageAsync, isLoading: deleting } = useDeleteImageMutation({
-        onSuccess: () => {
-            setShowDeleteModal(false);
-            setCurrentRowId(null)
-        }
-    });
+    const { mutate: deleteImage, mutateAsync: deleteImageAsync, isLoading: deleting, error: deleteImageError } = useDeleteImageMutation();
 
     const router = useRouter()
 
     const deleteHandler = async () => {
         if (!currentRowId) return;
-        try {
-            deleteImage(currentRowId)
-        } catch (err) {
-            console.log(err)
-        }
+        deleteImage(
+            currentRowId,
+            {
+                onSuccess: (res) => {
+                    setShowDeleteModal(false);
+                    setCurrentRowId(null);
+                    const message = res?.message ?? "Image deleted successfully!"
+                    toast.success(message)
+                },
+                onError: (err) => {
+                    toast.error(err.message || "Failed to delete image")
+                }
+            }
+        )
     }
 
     const copyHandler = (text: string) => {
@@ -224,7 +227,6 @@ const ContainerPage = () => {
                 </DropdownMenu >
             )
         },
-
     ]
 
     return (

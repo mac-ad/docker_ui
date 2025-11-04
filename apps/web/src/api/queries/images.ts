@@ -1,38 +1,31 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { deleteImage, fetchImagesList, getImageDetail, searchImages } from "../queryFn/images"
-import { toast } from "sonner"
+import { IDeleteImageResponse, IGetImageListReponse } from "@repo/shared"
+import { IApiErrorResponseBase } from "../../../../../packages/shared/src/types/api"
 
 
 export const useImageQuery = () => {
-    return useQuery({
+    return useQuery<IGetImageListReponse, IApiErrorResponseBase>({
         queryKey: ['imagesList'],
         queryFn: fetchImagesList
     })
 }
 
-export const useDeleteImageMutation = ({
-    onSuccess = null
-}: {
-    onSuccess?: null | (() => void)
-}) => {
+export const useDeleteImageMutation = () => {
 
     const queryClient = useQueryClient();
 
-    const successHandler = (data: any) => {
-        if (onSuccess) {
-            onSuccess()
-        }
+    const successHandler = () => {
         queryClient.invalidateQueries(["imagesList"])
-        const message = data?.message ?? "Image deleted successfully!"
-        toast.success(message)
     }
 
-
-    return useMutation({
+    return useMutation<
+        IDeleteImageResponse,
+        IApiErrorResponseBase,
+        string
+    >({
         mutationFn: (id: string) => deleteImage(id),
-        onError: (error: any) => {
-            toast.error(error.message || "Failed to delete image")
-        },
+        onError: () => { },
         onSuccess: successHandler
     })
 }
